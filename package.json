@@ -1,0 +1,15 @@
+{
+  "name": "prep-agent-root",
+  "version": "1.0.0",
+  "description": "AI-Powered Mock Interview & Code Execution Sandbox Platform",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install && cd ..",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "ai:dev": "cd ai-service && py main.py",
+    "dev:all": "concurrently -n SERVER,CLIENT,AI -c blue,green,yellow \"npm run server:dev\" \"npm run client:dev\" \"npm run ai:dev || true\""
+  },
+  "dependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

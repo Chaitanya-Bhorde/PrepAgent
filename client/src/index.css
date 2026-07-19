@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+}
+
+/* Custom Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition-colors duration-200;
+  }
+  .btn-primary {
+    @apply bg-[#2cbb5d] text-white hover:bg-[#2cbb5d]/90;
+  }
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+  }
+  .card {
+    @apply bg-white border border-gray-200 rounded-lg;
+  }
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#2cbb5d] focus:ring-1 focus:ring-[#2cbb5d];
+  }
+}
+
+/* LeetCode-like styling */
+.leetcode-header {
+  @apply bg-white border-b border-gray-200;
+}
+
+.leetcode-sidebar {
+  @apply bg-[#f7f7f7] border-r border-gray-200;
+}
+
+.leetcode-problem-item {
+  @apply px-4 py-3 border-b border-gray-200 hover:bg-[#f7f7f7] cursor-pointer transition-colors;
+}
+
+.leetcode-problem-item.active {
+  @apply bg-[#fff8e1] border-l-4 border-l-[#ffa116];
+}
+
+.difficulty-easy {
+  @apply text-[#2cbb5d] font-medium;
+}
+
+.difficulty-medium {
+  @apply text-[#ffa116] font-medium;
+}
+
+.difficulty-hard {
+  @apply text-[#ef4743] font-medium;
+}
+
+.code-editor {
+  @apply bg-[#1e1e1e] text-white font-mono text-sm;
+}
+
+.tab-active {
+  @apply border-b-2 border-[#2cbb5d] text-[#2cbb5d] font-medium;
+}
+
+.tag {
+  @apply px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded;
+}
