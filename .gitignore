@@ -1,0 +1,11 @@
+﻿# env files - covers .env in any folder (root, server, ai-service, client)
+**/.env
+**/.env.local
+*.env
+
+# common ignores
+node_modules
+**/node_modules
+dist
+dist-ssr
+*.local
