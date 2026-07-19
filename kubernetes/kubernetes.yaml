@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prepagent-server
+  labels:
+    app: prepagent-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prepagent-server
+  template:
+    metadata:
+      labels:
+        app: prepagent-server
+    spec:
+      containers:
+      - name: server
+        image: prepagent-server:latest
+        ports:
+        - containerPort: 5000
+        - containerPort: 50051
+        env:
+        - name: PORT
+          value: "5000"
+        - name: MONGODB_URI
+          value: "mongodb://prepagent-mongo:27017/prep-agent"
+        - name: REDIS_HOST
+          value: "prepagent-redis"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prepagent-server-srv
+spec:
+  selector:
+    app: prepagent-server
+  ports:
+  - name: http
+    port: 5000
+    targetPort: 5000
+  - name: grpc
+    port: 50051
+    targetPort: 50051
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prepagent-client
+  labels:
+    app: prepagent-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prepagent-client
+  template:
+    metadata:
+      labels:
+        app: prepagent-client
+    spec:
+      containers:
+      - name: client
+        image: prepagent-client:latest
+        ports:
+        - containerPort: 5173
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prepagent-client-srv
+spec:
+  selector:
+    app: prepagent-client
+  ports:
+  - port: 5173
+    targetPort: 5173
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prepagent-ai-service
+  labels:
+    app: prepagent-ai-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prepagent-ai-service
+  template:
+    metadata:
+      labels:
+        app: prepagent-ai-service
+    spec:
+      containers:
+      - name: ai-service
+        image: prepagent-ai-service:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prepagent-ai-srv
+spec:
+  selector:
+    app: prepagent-ai-service
+  ports:
+  - port: 8000
+    targetPort: 8000

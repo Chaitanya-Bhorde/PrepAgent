@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package prepagent;
+
+service CodeExecutionService {
+  rpc Execute (ExecutionRequest) returns (ExecutionResponse);
+}
+
+service AssessmentService {
+  rpc CalculateReadiness (ReadinessRequest) returns (ReadinessResponse);
+}
+
+message ExecutionRequest {
+  string code = 1;
+  string language = 2;
+}
+
+message ExecutionResponse {
+  bool success = 1;
+  string output = 2;
+  string error = 3;
+  int32 exitCode = 4;
+  int64 executionTime = 5;
+}
+
+message ReadinessRequest {
+  string userId = 1;
+  string targetCompany = 2;
+}
+
+message ReadinessResponse {
+  int32 overallScore = 1;
+  int32 resumeScore = 2;
+  int32 codingScore = 3;
+  int32 interviewScore = 4;
+  int32 sqlScore = 5;
+  string companyFit = 6;
+  repeated string recommendations = 7;
+}

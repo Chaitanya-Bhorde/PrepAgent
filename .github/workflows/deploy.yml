@@ -1,0 +1,47 @@
+name: CI/CD Build & Deploy Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-size: 18
+
+    - name: Install dependencies (Server)
+      run: |
+        cd server
+        npm install
+
+    - name: Install dependencies (Client)
+      run: |
+        cd client
+        npm install
+
+    - name: Build Vite static assets
+      run: |
+        cd client
+        npm run build
+
+    - name: Build Docker Server Image
+      run: |
+        docker build -t prepagent-server:latest ./server
+
+    - name: Build Docker Client Image
+      run: |
+        docker build -t prepagent-client:latest ./client
+
+    - name: Build Docker AI Image
+      run: |
+        docker build -t prepagent-ai:latest ./ai-service
