@@ -3,6 +3,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const { register, metrics } = require('./services/monitoring');
+const { logger, httpLogger, logAPIRequest } = require('./config/logger');
+const { setupSwagger } = require('./config/swagger');
 
 const app = express();
 
@@ -33,6 +35,10 @@ app.use(cookieParser());
 // Passport Session Initialization
 app.use(passport.initialize());
 
+// Logging Middleware
+app.use(httpLogger);
+app.use(logAPIRequest);
+
 // Prometheus Metrics Middleware
 app.use((req, res, next) => {
   const start = Date.now();
@@ -54,6 +60,9 @@ app.get('/metrics', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+// Swagger Documentation
+setupSwagger(app);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
