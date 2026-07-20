@@ -51,6 +51,14 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  targetCompany: {
+    type: String,
+    default: 'General'
+  },
+  preferences: {
+    emailNotifications: { type: Boolean, default: true },
+    darkMode: { type: Boolean, default: true }
+  },
   createdAt: {
     type: Date,
     default: Date.now
