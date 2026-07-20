@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Loader2, Flame, Award, ArrowUpRight, Star } from 'lucide-react';
+import { Loader2, Flame, Award, ArrowUpRight, Star, Target } from 'lucide-react';
 import { userAPI } from '../lib/api';
+import { placementScoreAPI } from '../lib/placementScoreAPI';
 
 const LEADERBOARD_DATA = [
   { rank: 1, name: 'Rajesh Kumar', college: 'IIT Bombay', score: 95, streak: 42, medal: '🥇' },
@@ -29,6 +30,7 @@ const TOPICS = ['Arrays', 'Strings', 'Trees', 'DP', 'Graphs', 'SQL', 'Stack', 'B
 
 export default function Journey() {
   const [stats, setStats] = useState(null);
+  const [placementScore, setPlacementScore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [leaderboardPage, setLeaderboardPage] = useState(1);
   const [hoverText, setHoverText] = useState('Hover over heatmap cell to view details');
@@ -36,10 +38,14 @@ export default function Journey() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statsRes = await userAPI.stats();
+        const [statsRes, scoreRes] = await Promise.all([
+          userAPI.stats(),
+          placementScoreAPI.getScore().catch(() => ({ data: { score: null } }))
+        ]);
         setStats(statsRes.data.stats);
+        setPlacementScore(scoreRes.data.score);
       } catch (err) {
-        console.error('Failed to load journey statistics:', err);
+        console.error('Failed to load journey data:', err);
       } finally {
         setLoading(false);
       }
@@ -81,9 +87,9 @@ export default function Journey() {
         </div>
       </div>
 
-      {/* TOP ROW: 4 Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1 */}
+      {/* TOP ROW: 5 Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Card 1: Problems Solved */}
         <div className="bg-[#1A1A1A] border border-[#2D2D2D] rounded-lg p-4 relative overflow-hidden group hover:scale-[1.01] transition-all duration-200">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#FFA116]" />
           <span className="text-[10px] text-[#8C8C8C] uppercase font-bold tracking-wider">Problems Solved</span>
@@ -92,7 +98,7 @@ export default function Journey() {
           </p>
         </div>
 
-        {/* Card 2 */}
+        {/* Card 2: Current Streak */}
         <div className="bg-[#1A1A1A] border border-[#2D2D2D] rounded-lg p-4 relative overflow-hidden group hover:scale-[1.01] transition-all duration-200">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#FFA116]" />
           <span className="text-[10px] text-[#8C8C8C] uppercase font-bold tracking-wider">Current Streak</span>
@@ -101,7 +107,7 @@ export default function Journey() {
           </p>
         </div>
 
-        {/* Card 3 */}
+        {/* Card 3: Accuracy Rate */}
         <div className="bg-[#1A1A1A] border border-[#2D2D2D] rounded-lg p-4 relative overflow-hidden group hover:scale-[1.01] transition-all duration-200">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#FFA116]" />
           <span className="text-[10px] text-[#8C8C8C] uppercase font-bold tracking-wider">Accuracy Rate</span>
@@ -110,7 +116,7 @@ export default function Journey() {
           </p>
         </div>
 
-        {/* Card 4 */}
+        {/* Card 4: Interview Score */}
         <div className="bg-[#1A1A1A] border border-[#2D2D2D] rounded-lg p-4 relative overflow-hidden group hover:scale-[1.01] transition-all duration-200">
           <div className="absolute top-0 left-0 w-1 h-full bg-[#FFA116]" />
           <span className="text-[10px] text-[#8C8C8C] uppercase font-bold tracking-wider">Interview Score</span>
@@ -123,6 +129,21 @@ export default function Journey() {
               <Star size={11} fill="#FFA116" />
             </span>
           </p>
+        </div>
+
+        {/* Card 5: Placement Readiness Score */}
+        <div className="bg-[#1A1A1A] border border-[#2D2D2D] rounded-lg p-4 relative overflow-hidden group hover:scale-[1.01] transition-all duration-200">
+          <div className="absolute top-0 left-0 w-1 h-full bg-[#00B8A3]" />
+          <span className="text-[10px] text-[#8C8C8C] uppercase font-bold tracking-wider">Placement Score</span>
+          <p className="text-2xl font-extrabold text-[#00B8A3] mt-2 flex items-baseline gap-1.5">
+            {placementScore ? `${placementScore.overallScore}%` : '--'}
+            <Target size={14} className="ml-1" />
+          </p>
+          {placementScore && (
+            <p className="text-[9px] text-[#8C8C8C] mt-1">
+              {placementScore.overallScore >= 80 ? '🎯 Ready!' : placementScore.overallScore >= 60 ? '📈 Improving' : '💪 Keep Practicing'}
+            </p>
+          )}
         </div>
       </div>
 
