@@ -11,15 +11,17 @@ const seedAllProblems = async () => {
 
     // Seed DSA Problems
     console.log('📚 Seeding DSA Problems...');
-    const dsaProblems = require('./problemSeeds');
-    const dsaData = dsaProblems.generate50Problems ? dsaProblems.generate50Problems() : [];
+    const problemSeeds = require('./problemSeeds');
     
-    if (dsaData.length > 0) {
-      await Problem.deleteMany({});
-      await Problem.insertMany(dsaData);
-      console.log(`✅ Seeded ${dsaData.length} DSA problems\n`);
+    // Check if problems already exist
+    const existingDsaCount = await Problem.countDocuments();
+    if (existingDsaCount === 0) {
+      // Import and run the seed function directly
+      await require('./problemSeeds');
+      const newCount = await Problem.countDocuments();
+      console.log(`✅ Seeded ${newCount} DSA problems\n`);
     } else {
-      console.log('⚠️  No DSA problems to seed\n');
+      console.log(`ℹ️  ${existingDsaCount} DSA problems already exist, skipping...\n`);
     }
 
     // Seed SQL Problems from company seeds
