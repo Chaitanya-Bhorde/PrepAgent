@@ -55,7 +55,7 @@ PrepAgent is an enterprise-grade, high-fidelity Placement Preparation Platform d
    CLIENT_URL=http://localhost:5173
    MONGODB_URI=mongodb://localhost:27017/prep-agent
    JWT_SECRET=your_super_secret_prep_agent_jwt_key_here
-   GEMINI_API_KEY=AQ.Ab8RN6KERSlw2rZgvqa4pktnXeZJHe9A4d5itWGjJVt153M8Jw
+    GEMINI_API_KEY=your_gemini_api_key_here
    ```
 
 ### Running Locally (Without Docker)
